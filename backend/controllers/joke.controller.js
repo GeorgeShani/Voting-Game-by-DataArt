@@ -1,4 +1,3 @@
-import User from "../models/user.model.js";
 import Joke from "../models/joke.model.js";
 import axios from "axios";
 
@@ -41,12 +40,9 @@ export const getJoke = async (req, res) => {
 export const submitVote = async (req, res) => {
   const { id: jokeId } = req.params;
   const { emoji } = req.body;
-  const userId = req.user._id;
+  const loggedInUser = req.user;
 
   try {
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
     const joke = await Joke.findById(jokeId);
     if (!joke) return res.status(404).json({ message: "Joke not found" });
 
@@ -59,31 +55,31 @@ export const submitVote = async (req, res) => {
     }
 
     // Check if user already voted for this joke
-    const existingVoteIndex = user.votedJokes.findIndex(
+    const existingVoteIndex = loggedInUser.votedJokes.findIndex(
       (vote) => vote.jokeId.toString() === joke._id.toString()
     );
 
     if (existingVoteIndex !== -1) {
-      const oldEmoji = user.votedJokes[existingVoteIndex].emoji;
+      const oldEmoji = loggedInUser.votedJokes[existingVoteIndex].emoji;
       const oldEmojiIndex = emojiIndexMap[oldEmoji];
 
       if (oldEmoji === emoji) {
         // Same emoji clicked → Remove vote (unvote)
-        user.votedJokes.splice(existingVoteIndex, 1);
+        loggedInUser.votedJokes.splice(existingVoteIndex, 1);
         joke.votes[emojiIndex].value = Math.max(0, joke.votes[emojiIndex].value - 1);
       } else {
         // Different emoji clicked → Switch vote
-        user.votedJokes[existingVoteIndex].emoji = emoji;
+        loggedInUser.votedJokes[existingVoteIndex].emoji = emoji;
         joke.votes[oldEmojiIndex].value = Math.max(0, joke.votes[oldEmojiIndex].value - 1);
         joke.votes[emojiIndex].value += 1;
       }
     } else {
       // First time voting
-      user.votedJokes.push({ jokeId, emoji });
+      loggedInUser.votedJokes.push({ jokeId, emoji });
       joke.votes[emojiIndex].value += 1;
     }
 
-    await user.save();
+    await loggedInUser.save();
     await joke.save();
     res.status(200).json({ message: "Vote updated!", joke });
   } catch (error) {

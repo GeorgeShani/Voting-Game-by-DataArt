@@ -1,5 +1,5 @@
-import { generateToken } from "../utils/generateToken.js";
-import { validateEmail, validatePassword } from "../utils/validators.js";
+import { validateEmail, validatePassword } from "../lib/validate.js";
+import { generateToken } from "../lib/generateToken.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
