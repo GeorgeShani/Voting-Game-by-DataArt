@@ -18,9 +18,11 @@ const jokeSchema = new mongoose.Schema(
     },
     votes: [
       {
+        _id: false,
         value: {
           type: Number,
           required: true,
+          default: 0,
         },
         label: {
           type: String,

@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     votedJokes: [
       {
+        _id: false,
         jokeId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Joke",

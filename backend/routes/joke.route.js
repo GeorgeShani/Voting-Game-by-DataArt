@@ -1,13 +1,10 @@
 import express from "express";
+import { protectRoute } from "../middleware/auth.middleware.js"
+import { getJoke, submitVote } from "../controllers/joke.controller.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Why did the scarecrow win an award? Because he was outstanding in his field.");
-});
-
-router.get("/dark", (req, res) => {
-  res.send("Why don't scientists trust atoms? Because they make up everything.");
-});
+router.get("/", getJoke);
+router.post("/:id", protectRoute, submitVote);
 
 export default router;
