@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.route.js";  
 import jokeRoutes from "./routes/joke.route.js";
+import userRoutes from "./routes/user.route.js";
 
 import { connectDB } from "./db/connectDB.js";
 import { deleteJokesWithZeroVotes } from "./controllers/joke.controller.js"
@@ -25,6 +26,7 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/joke", jokeRoutes);
+app.use("/api/user", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
