@@ -99,7 +99,7 @@ export default function LogInPage() {
         </form>
         {/* Register Link */}
         <div className="text-center mt-4">
-          <p className="text-gray-600 text-sm md:text-lg">
+          <p className="text-gray-600 text-sm md:text-md">
             Don’t have an account?{" "}
             <Link
               to="/signup"

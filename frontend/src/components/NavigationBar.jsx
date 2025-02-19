@@ -6,7 +6,7 @@ export default function NavigationBar() {
   const { authUser, logOut } = useAuth();
 
   return (
-    <nav className="top-0 left-0 w-full flex items-center justify-between px-6 py-6 bg-transparent z-50">
+    <nav className="w-full flex items-center justify-between px-6 py-6 bg-transparent z-50">
       {/* Left Side - Logo */}
       <Link to="/" className="text-2xl font-bold">
         DailyJokes

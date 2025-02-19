@@ -5,13 +5,13 @@ import toast from "react-hot-toast";
 
 // Fetch joke from backend
 const fetchJoke = async () => {
-  const { data } = await apiClient.get("/jokes");
+  const { data } = await apiClient.get("/joke");
   return data;
 };
 
 // Submit a vote for a joke
 const submitVote = async ({ jokeId, emoji }) => {
-  const { data } = await apiClient.post(`/jokes/${jokeId}`, { emoji });
+  const { data } = await apiClient.post(`/joke/${jokeId}`, { emoji });
   return data;
 };
 
@@ -82,7 +82,6 @@ export const useJoke = () => {
     },
     onSuccess: (response) => {
       queryClient.setQueryData(["joke"], response.joke);
-      toast.success(response.message || "Vote submitted!");
     },
     onError: (error, _, context) => {
       toast.error(error.response?.data?.message || "Voting failed");
@@ -91,10 +90,6 @@ export const useJoke = () => {
       if (context?.prevJoke) {
         queryClient.setQueryData(["joke"], context.prevJoke);
       }
-    },
-    onSettled: () => {
-      // Since auth user is managed in context, we only invalidate the joke query
-      queryClient.invalidateQueries({ queryKey: ["joke"] });
     },
   });
 

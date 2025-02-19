@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.route.js";
 import jokeRoutes from "./routes/joke.route.js";
 
 import { connectDB } from "./db/connectDB.js";
+import { deleteJokesWithZeroVotes } from "./controllers/joke.controller.js"
 
 dotenv.config();
 
@@ -28,4 +29,7 @@ app.use("/api/joke", jokeRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
+
+  // Automated Cleanup: Deletes jokes with 0 votes every hour
+  setInterval(deleteJokesWithZeroVotes, 60 * 60 * 1000); // Runs every 1 hour
 });

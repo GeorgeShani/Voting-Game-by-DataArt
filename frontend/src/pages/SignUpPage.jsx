@@ -150,7 +150,7 @@ export default function SignUpPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-yellow-500 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition"
+            className="w-full py-3 bg-yellow-400 text-white font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition"
             disabled={isSigningUp}
           >
             {isSigningUp ? (
@@ -165,7 +165,7 @@ export default function SignUpPage() {
         </form>
         {/* Log In Link */}
         <div className="text-center mt-4">
-          <p className="text-gray-600 text-sm md:text-lg">
+          <p className="text-gray-600 text-sm md:text-md">
             Already have an account?{" "}
             <Link
               to="/login"

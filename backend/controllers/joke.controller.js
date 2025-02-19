@@ -37,10 +37,11 @@ export const getJoke = async (req, res) => {
   }
 };
 
+// Controller to handle voting on a joke
 export const submitVote = async (req, res) => {
-  const { id: jokeId } = req.params;
-  const { emoji } = req.body;
-  const loggedInUser = req.user;
+  const { id: jokeId } = req.params; // Extract joke ID from request parameters
+  const { emoji } = req.body; // Extract emoji reaction from request body
+  const loggedInUser = req.user; // Get the authenticated user from middleware
 
   try {
     const joke = await Joke.findById(jokeId);
@@ -85,5 +86,24 @@ export const submitVote = async (req, res) => {
   } catch (error) {
     console.error("Error in submitVote controller:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Automated task for deleting the jokes with 0 votes in total (for database cleanup purposes)
+export const deleteJokesWithZeroVotes = async () => {
+  try {
+    const result = await Joke.deleteMany({
+      $and: [
+        { "votes.0.value": 0 },
+        { "votes.1.value": 0 },
+        { "votes.2.value": 0 },
+      ],
+    });
+
+    if (result.deletedCount > 0) {
+      console.log(`🗑 Deleted ${result.deletedCount} jokes with 0 votes.`);
+    }
+  } catch (error) {
+    console.error("Error cleaning up jokes:", error.message);
   }
 };
