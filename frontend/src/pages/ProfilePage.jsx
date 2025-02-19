@@ -22,21 +22,27 @@ export default function ProfilePage() {
   } = useUserProfile();
 
   if (isLoadingVotedJokes || isLoadingCommonEmoji || isLoadingVoteCount) {
-    return <Loader2 className="h-12 w-12 text-gray-600 animate-spin mx-auto" />;
+    return (
+      <div className="max-w-full md:max-w-[85%] min-h-screen mx-auto p-6">
+        <Loader2 className="h-12 w-12 text-gray-600 animate-spin mx-auto" />
+      </div>
+    );
   }
 
   if (isErrorVotedJokes || isErrorCommonEmoji || isErrorVoteCount) {
     return (
-      <div className="text-center text-red-500">
-        {votedJokesError?.message ||
-          mostCommonEmojiError?.message ||
-          voteCountError?.message}
+      <div className="max-w-full md:max-w-[85%] min-h-screen mx-auto p-6">
+        <div className="text-center text-red-500">
+          {votedJokesError?.message ||
+            mostCommonEmojiError?.message ||
+            voteCountError?.message}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-full md:max-w-[85%] mx-auto p-6">
+    <div className="max-w-full md:max-w-[85%] min-h-screen mx-auto p-6">
       <div className="bg-[#fafafa] shadow-lg rounded-lg flex flex-col items-center justify-center gap-4 p-8">
         {/* User Profile Info */}
         <div className="text-center flex-col flex items-center justify-center gap-2">
@@ -81,7 +87,7 @@ export default function ProfilePage() {
           {votedJokes && votedJokes.length > 0 ? (
             // Sort jokes by voteTime in descending order and get the first 10 jokes
             votedJokes
-              .sort((a, b) => new Date(b.voteTime) - new Date(a.voteTime)) // Sort by voteTime in descending order
+              .sort((a, b) => new Date(b.votedAt) - new Date(a.votedAt)) // Sort by voteTime in descending order
               .slice(0, 10) // Get the first 10 jokes
               .map((joke) => (
                 <div
