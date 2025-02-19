@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
+import { apiClient } from "../lib/axios";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
@@ -10,36 +10,10 @@ export const AuthProvider = ({ children }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  // Helper function for making requests with fetch
-  const request = async (url, method = "GET", body = null) => {
-    try {
-      const options = {
-        method,
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // Ensures cookies (auth token) are sent
-      };
-      
-      if (body) {
-        options.body = JSON.stringify(body);
-      }
-
-      const response = await fetch(`${BASE_URL}${url}`, options);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Request failed");
-      }
-
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
   // Check if user is authenticated
   const checkAuth = async () => {
     try {
-      const data = await request("/auth/check");
+      const { data } = await apiClient.get("/auth/check");
       setAuthUser(data);
     } catch (error) {
       console.error("Error in checkAuth:", error);
@@ -53,12 +27,12 @@ export const AuthProvider = ({ children }) => {
   const signUp = async (formData) => {
     setIsSigningUp(true);
     try {
-      const data = await request("/auth/signup", "POST", formData);
+      const { data } = await apiClient.post("/auth/signup", formData);
       setAuthUser(data);
       toast.success("Account created successfully");
     } catch (error) {
       console.error("Error in signUp:", error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || "Sign-up failed");
     } finally {
       setIsSigningUp(false);
     }
@@ -68,12 +42,12 @@ export const AuthProvider = ({ children }) => {
   const logIn = async (formData) => {
     setIsLoggingIn(true);
     try {
-      const data = await request("/auth/login", "POST", formData);
+      const { data } = await apiClient.post("/auth/login", formData);
       setAuthUser(data);
       toast.success("Logged in successfully");
     } catch (error) {
       console.error("Error in logIn:", error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setIsLoggingIn(false);
     }
@@ -82,12 +56,12 @@ export const AuthProvider = ({ children }) => {
   // Log out the user
   const logOut = async () => {
     try {
-      await request("/auth/logout", "POST");
+      await apiClient.post("/auth/logout");
       setAuthUser(null);
       toast.success("Logged out successfully");
     } catch (error) {
       console.error("Error in logOut:", error);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || "Logout failed");
     }
   };
 
@@ -105,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         signUp,
         logIn,
         logOut,
-        checkAuth
+        checkAuth,
       }}
     >
       {children}
