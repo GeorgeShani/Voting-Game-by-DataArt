@@ -34,7 +34,7 @@ A fun web application where users can vote on daily jokes using emoji reactions!
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone git@github.com:GeorgeShani/Voting-Game-by-DataArt.git
+git clone https://github.com/GeorgeShani/Voting-Game-by-DataArt.git
 cd Voting-Game-by-DataArt
 ```
 
