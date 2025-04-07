@@ -125,7 +125,7 @@ export default function ProfilePage() {
                 </div>
               ))
           ) : (
-            <p>You haven't voted for any jokes yet!</p>
+            <p>You haven&apos;t voted for any jokes yet!</p>
           )}
         </div>
       </div>

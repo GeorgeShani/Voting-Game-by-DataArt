@@ -26,7 +26,7 @@ export default function App() {
   }
 
   return (
-    <div>
+    <>
       <NavigationBar />
       <Routes>
         <Route
@@ -48,6 +48,6 @@ export default function App() {
       </Routes>
       <Footer />
       <Toaster />
-    </div>
+    </>
   );
 }
